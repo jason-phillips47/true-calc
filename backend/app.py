@@ -4,7 +4,7 @@ import numpy as np
 import itertools
 
 app = Flask(__name__, static_folder='../frontend/dist', static_url_path='/')
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/calculate_ev', methods=['POST'])
 def calculate_ev():
