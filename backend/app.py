@@ -1,20 +1,37 @@
 from flask import Flask, request, jsonify, send_from_directory
 import numpy as np
-import os
+import itertools
 
-app = Flask(__name__, static_folder='../probability-calculator/dist', static_url_path='/')
+app = Flask(__name__, static_folder='../frontend/dist', static_url_path='/')
 
-@app.route('/calculate', methods=['POST'])
-def calculate_probability():
+@app.route('/calculate_ev', methods=['POST'])
+def calculate_ev():
     data = request.json
-    events = data['events']
+    legs = data['legs']
+    payouts = data['payouts']
 
-    combined_probability = 1
-    for event in events:
-        outcome_probability = float(event['probability'])
-        combined_probability *= outcome_probability
+    leg_probs = [leg['hitRate'] / 100 for leg in legs]
+    num_legs = len(legs)
 
-    return jsonify({'probability': combined_probability})
+    ev = 0
+
+    # Generate all possible hit/miss combinations for the legs
+    for combination in itertools.product([0, 1], repeat=num_legs):
+        hits = sum(combination)
+        prob = np.prod([leg_probs[i] if combination[i] == 1 else 1 - leg_probs[i] for i in range(num_legs)])
+
+        payout = -1  # Default loss of 1 unit
+        for payout_condition in payouts:
+            if hits == payout_condition['hits']:
+                if payout_condition['type'] == 'payout':
+                    payout = payout_condition['amount']
+                else:
+                    payout = -payout_condition['amount']
+                break
+
+        ev += prob * payout
+
+    return jsonify({'ev': ev})
 
 @app.route('/')
 def serve():

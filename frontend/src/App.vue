@@ -1,17 +1,17 @@
 <!-- src/App.vue -->
 <template>
   <div id="app">
-    <ProbabilityForm />
+    <ParlayCalculator />
   </div>
 </template>
 
 <script>
-import ProbabilityForm from "./components/ProbabilityForm.vue";
+import ParlayCalculator from "./components/ParlayCalculator.vue";
 
 export default {
   name: "App",
   components: {
-    ProbabilityForm,
+    ParlayCalculator,
   },
 };
 </script>
