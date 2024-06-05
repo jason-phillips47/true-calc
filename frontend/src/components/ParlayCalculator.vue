@@ -53,7 +53,8 @@
             <button type="submit" class="calculate-button">Calculate EV</button>
         </form>
         <div v-if="result !== null" class="result">
-            <h2>Expected Value (EV): {{ result.toFixed(6) }}</h2>
+            <h2 v-if="result !== undefined">Expected Value (EV): {{ result.toFixed(6) }}</h2>
+            <h2 v-else>Unable to calculate EV. Please check your input.</h2>
         </div>
     </div>
 </template>
@@ -260,6 +261,7 @@ export default {
                 this.result = response.data.ev;
             } catch (error) {
                 console.error('There was an error calculating the EV!', error);
+                this.result = undefined;
             }
         }
     }
