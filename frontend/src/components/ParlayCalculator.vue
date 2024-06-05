@@ -32,7 +32,7 @@
                             <input type="text" v-if="payout.type === 'payout'" v-model="payout.amount" />
                             <br>
                             <input type="radio" v-model="payout.type" :value="'loss'" /> Lose 
-                            <input type="number" v-if="payout.type === 'loss'" v-model.number="payout.loss" min="0" /> Units
+                            <input type="number" v-if="payout.type === 'loss'" v-model.number="payout.loss" min="0" step="0.0001"/> Units
                         </label>
                         <button type="button" @click="removePayout(payoutIndex)">Remove Payout</button>
                     </div>
@@ -107,6 +107,7 @@ export default {
 
 body {
     font-family: 'Roboto', sans-serif;
+    background: #6c757d;
 }
 
 .calculator {
@@ -187,6 +188,6 @@ button[type="button"]:hover {
 
 .result h2 {
     font-size: 1.5em;
-    color: #28a745;
+    color: #000000;
 }
 </style>
