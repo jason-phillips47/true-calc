@@ -60,10 +60,10 @@
             <button type="submit" class="calculate-button">Calculate EV</button>
         </form>
         <div v-if="result !== null" class="result">
-    <h2 :style="{ color: result > 0 ? 'green' : 'red' }">
+    <h2 :style="{ color: result > 0 ? 'green' : result < 0 ? 'red' : 'black' }">
         Expected Value (EV): {{ result.toFixed(6) }} units
     </h2>
-    <h2 v-if="unitSize > 0" :style="{ color: result > 0 ? 'green' : 'red' }">
+    <h2 v-if="unitSize > 0" :style="{ color: result > 0 ? 'green' : result < 0 ? 'red' : 'black' }">
         Expected Value (EV): ${{ (result * unitSize).toFixed(2) }}
     </h2>
 </div>
@@ -83,7 +83,7 @@ export default {
                 { hits: 1, total: 1, amount: "+100", type: 'payout'}
             ],
             result: null,
-            unitSize: 0, // Add this line
+            unitSize: 1,
             showPrizepicks: false,
             showUnderdog: false,
             prizepicksPresets: [
