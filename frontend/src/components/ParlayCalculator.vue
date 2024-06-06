@@ -12,6 +12,12 @@
             </div>
 
         </div>
+        <div class="unit-size">
+    <label>
+        Unit Size ($):
+        <input type="number" v-model.number="unitSize" min="0" step="0.01" />
+    </label>
+</div>
         <form @submit.prevent="handleSubmit">
             <div class="columns">
                 <div class="column">
@@ -24,6 +30,7 @@
                                 v-model.number="leg.hitRate"
                                 min="0"
                                 max="100"
+                                step="0.00001"
                                 required
                             />
                         </label>
@@ -50,23 +57,16 @@
                     <button type="button" @click="addPayout">Add Payout</button>
                 </div>
             </div>
-            <div class="unit-size">
-                <label>
-                    Unit Size ($):
-                    <input type="number" v-model.number="unitSize" min="0" step="0.01" />
-                </label>
-            </div>
             <button type="submit" class="calculate-button">Calculate EV</button>
         </form>
         <div v-if="result !== null" class="result">
-            <h2 :style="{ color: result > 0 ? 'green' : 'red' }">
-                Expected Value (EV): {{ result.toFixed(6) }} units
-            </h2>
-            <h2 v-if="unitSize > 0" :style="{ color: result > 0 ? 'green' : 'red' }">
-                Expected Value (EV): ${{ (result * unitSize).toFixed(2) }}
-            </h2>
-            <h2 v-else>Unable to calculate EV. Please check your input.</h2>
-        </div>
+    <h2 :style="{ color: result > 0 ? 'green' : 'red' }">
+        Expected Value (EV): {{ result.toFixed(6) }} units
+    </h2>
+    <h2 v-if="unitSize > 0" :style="{ color: result > 0 ? 'green' : 'red' }">
+        Expected Value (EV): ${{ (result * unitSize).toFixed(2) }}
+    </h2>
+</div>
     </div>
 </template>
 
