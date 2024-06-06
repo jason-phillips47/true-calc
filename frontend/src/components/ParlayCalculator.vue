@@ -12,12 +12,6 @@
             </div>
 
         </div>
-        <div class="unit-size">
-    <label>
-        Unit Size ($):
-        <input type="number" v-model.number="unitSize" min="0" step="0.01" />
-    </label>
-</div>
         <form @submit.prevent="handleSubmit">
             <div class="columns">
                 <div class="column">
@@ -57,13 +51,27 @@
                     <button type="button" @click="addPayout">Add Payout</button>
                 </div>
             </div>
+            <div class="set-all-hit-rate">
+        <label>
+            Set all legs hit rate (%):
+            <input type="number" v-model.number="allLegsHitRate" min="0" max="100" step="0.00001" />
+        </label>
+        <button type="button" @click="setAllLegsHitRate">Set</button>
+    </div>
+            <div class="unit-size">
+    <label>
+        Unit Size ($):
+        <input type="number" v-model.number="unitSize" min="0" step="0.01" />
+    </label>
+</div>
+<p :style="{fontSize: '8px'}">First calculation may take a while.</p>
             <button type="submit" class="calculate-button">Calculate EV</button>
         </form>
         <div v-if="result !== null" class="result">
     <h2 :style="{ color: result > 0 ? 'green' : result < 0 ? 'red' : 'black' }">
         Expected Value (EV): {{ result.toFixed(6) }} units
     </h2>
-    <h2 v-if="unitSize > 0" :style="{ color: result > 0 ? 'green' : result < 0 ? 'red' : 'black' }">
+    <h2 v-if="unitSize !== null && unitSize > 0" :style="{ color: result > 0 ? 'green' : result < 0 ? 'red' : 'black' }">
         Expected Value (EV): ${{ (result * unitSize).toFixed(2) }}
     </h2>
 </div>
@@ -83,7 +91,8 @@ export default {
                 { hits: 1, total: 1, amount: "+100", type: 'payout'}
             ],
             result: null,
-            unitSize: 1,
+            unitSize: null,
+            allLegsHitRate: null,
             showPrizepicks: false,
             showUnderdog: false,
             prizepicksPresets: [
@@ -262,6 +271,13 @@ export default {
             }
             return 0;
         },
+        setAllLegsHitRate() {
+        if (this.allLegsHitRate !== null) {
+            this.legs.forEach(leg => {
+                leg.hitRate = this.allLegsHitRate;
+            });
+        }
+    },
         async handleSubmit() {
             try {
                 const processedPayouts = this.payouts.map(payout => ({
