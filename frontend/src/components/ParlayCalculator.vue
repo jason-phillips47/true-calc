@@ -1,6 +1,6 @@
 <template>
     <div class="calculator">
-        <h1>Parlay EV Calculator</h1>
+        <h1>EV Calculator</h1>
         <div class="presets">
             <button @click="togglePreset('prizepicks')">Prizepicks Presets</button>
             <div v-if="showPrizepicks" class="preset-group">
@@ -50,10 +50,21 @@
                     <button type="button" @click="addPayout">Add Payout</button>
                 </div>
             </div>
+            <div class="unit-size">
+                <label>
+                    Unit Size ($):
+                    <input type="number" v-model.number="unitSize" min="0" step="0.01" />
+                </label>
+            </div>
             <button type="submit" class="calculate-button">Calculate EV</button>
         </form>
         <div v-if="result !== null" class="result">
-            <h2 v-if="result !== undefined">Expected Value (EV): {{ result.toFixed(6) }}</h2>
+            <h2 :style="{ color: result > 0 ? 'green' : 'red' }">
+                Expected Value (EV): {{ result.toFixed(6) }} units
+            </h2>
+            <h2 v-if="unitSize > 0" :style="{ color: result > 0 ? 'green' : 'red' }">
+                Expected Value (EV): ${{ (result * unitSize).toFixed(2) }}
+            </h2>
             <h2 v-else>Unable to calculate EV. Please check your input.</h2>
         </div>
     </div>
@@ -69,9 +80,10 @@ export default {
                 { hitRate: 50 }
             ],
             payouts: [
-                { hits: 1, total: 1, amount: 100 }
+                { hits: 1, total: 1, amount: "+100", type: 'payout'}
             ],
             result: null,
+            unitSize: 0, // Add this line
             showPrizepicks: false,
             showUnderdog: false,
             prizepicksPresets: [
@@ -402,4 +414,21 @@ button[type="button"]:hover {
     font-size: 1.5em;
     color: #000000;
 }
+
+.unit-size {
+    margin: 20px 0;
+}
+
+.unit-size label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.unit-size input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
 </style>
