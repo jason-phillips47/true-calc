@@ -1,6 +1,6 @@
 <template>
     <div class="calculator">
-        <h1>EV Calculator</h1>
+        <h1>DFS Focused EV Calculator</h1>
         <div class="presets">
             <button @click="togglePreset('prizepicks')">Prizepicks Presets</button>
             <div v-if="showPrizepicks" class="preset-group">
@@ -36,7 +36,7 @@
                     <h3>Payouts</h3>
                     <div v-for="(payout, payoutIndex) in payouts" :key="payoutIndex" class="payout">
                         <label>
-                            If
+                            If exactly
                             <input type="number" v-model.number="payout.hits" min="0" :max="legs.length" required />
                             out of {{ legs.length }} legs hit,
                             <br>
@@ -48,21 +48,24 @@
                         </label>
                         <button type="button" @click="removePayout(payoutIndex)">Remove Payout</button>
                     </div>
-                    <button type="button" @click="addPayout">Add Payout</button>
+                    <button type="button" @click="addPayout">Add Payout</button><p :style="{fontSize: '8px'}">Payouts use American Odds</p>
                 </div>
             </div>
-            <div class="set-all-hit-rate">
-        <label>
-            Set all legs hit rate (%):
-            <input type="number" v-model.number="allLegsHitRate" min="0" max="100" step="0.00001" />
-        </label>
-        <button type="button" @click="setAllLegsHitRate">Set</button>
-    </div>
-            <div class="unit-size">
-    <label>
-        Unit Size ($):
-        <input type="number" v-model.number="unitSize" min="0" step="0.01" />
-    </label>
+            <div class="options">
+                    <div class="set-all-hit-rate">
+                <label>
+                    Set all legs hit rate (%):
+                    <input type="number" v-model.number="allLegsHitRate" min="0" max="100" step="0.00001" />
+                    <button type="button" @click="setAllLegsHitRate">Set</button>
+                </label>
+                
+            </div>
+                    <div class="unit-size">
+            <label>
+                Unit Size ($):
+                <input type="number" v-model.number="unitSize" min="0" step="0.01" />
+            </label>
+</div>
 </div>
 <p :style="{fontSize: '8px'}">First calculation may take a while.</p>
             <button type="submit" class="calculate-button">Calculate EV</button>
@@ -387,7 +390,7 @@ label {
 }
 
 input[type="number"], input[type="text"] {
-    width: 100%;
+    width: auto;
     padding: 5px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
@@ -431,8 +434,8 @@ button[type="button"]:hover {
     color: #000000;
 }
 
-.unit-size {
-    margin: 20px 0;
+.unit-size, .set-all-hit-rate {
+    margin-top: 20px;
 }
 
 .unit-size label {
@@ -440,11 +443,24 @@ button[type="button"]:hover {
     margin-bottom: 10px;
 }
 
-.unit-size input {
-    width: 100%;
+.unit-size input, .set-all-hit-rate input {
+    width: auto;
     padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+}
+
+.unit-size button, .set-all-hit-rate button {
+    margin-left: 10px;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.set-all-hit-rate, .unit-size {
+    width: auto;
+    
 }
 
 </style>
